@@ -1,8 +1,7 @@
 const bcrypt = require("bcriptjs");
 const jwt = require("jsonwebtoken");
 
-APP_SECRET = "Graphql";
-
+const APP_SECRET = require("../utils");
 // ユーザーの新規登録のリゾルバ
 async function signup(parent, args, context) {
   //パスワードの設定
