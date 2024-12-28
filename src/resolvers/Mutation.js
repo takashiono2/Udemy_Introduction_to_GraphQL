@@ -1,7 +1,7 @@
-const bcrypt = require("bcriptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const APP_SECRET = require("../utils");
+const { APP_SECRET } = require("../utils");
 // ユーザーの新規登録のリゾルバ
 async function signup(parent, args, context) {
   //パスワードの設定
@@ -36,7 +36,7 @@ async function login(parent, args, context) {
     throw new Error("無効なパスワードです");
   }
   //パスワードが正しい時
-  const token = jwt.sign({ useId: user.id }, APP_SECRET);
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   return {
     token,
@@ -47,11 +47,16 @@ async function login(parent, args, context) {
 //ニュースを投稿するリゾルバ
 async function post(parent, args, context) {
   const { userId } = context;
+
+  if (!userId) {
+    throw new Error("User is not authenticated");
+  }
+
   return await context.prisma.link.create({
     data: {
       url: args.url,
       description: args.description,
-      postedBy: { connect: { id: userId } }
+      postedBy: { connect: { id: userId } },
     }
   });
 }

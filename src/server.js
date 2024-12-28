@@ -3,39 +3,22 @@ const fs = require("fs");
 const path = require("path");
 
 const { PrismaClient } = require("@prisma/client");
-const { getUserId } = require("/utils");
+const { getUserId } = require("./utils");
+
+//リゾルバ関係のファイル
+const Query = require("./resolvers/Query");
+const Mutation = require("./resolvers/Mutation");
+const Link = require("./resolvers/Link");
+const User = require("./resolvers/User");
 
 const prisma = new PrismaClient();
 
-//HackerNewsの1つ1つの投稿
-// let links = [
-//   {
-//     id: "link-0",
-//     description: "GraphQLチュートリアルをUdemyで学ぶ",
-//     url: "www.udemy-graphql-tutorial.com",
-//   },
-// ];
-
 //リゾルバ関数
 const resolvers = {
-  Query: {
-    info: () => 'HackerNews クローン',
-    feed: async (parent, args, context) => {
-      return context.prisma.link.findMany()
-    },
-  },
-
-  Mutation: {
-    post: (parent, args, context) => {
-      const newlink = context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        }
-      });
-      return newlink;
-    },
-  },
+  Query,
+  Mutation,
+  Link,
+  User,
 };
 
 
@@ -46,8 +29,8 @@ const server = new ApolloServer({
     return {
       ...req,
       prisma,
-      UserId: req && req.headers.authorization ? getUserId(req) : null,
-    }
+      userId: req && req.headers.authorization ? getUserId(req) : null,  // userIdをcontextに渡す
+    };
   },
 });
 

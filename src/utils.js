@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-APP_SECRET = "Graphql";
+APP_SECRET = "GraphQL-is-aw3some";
 
 function getTokenPayload(token) {
   //トークン化された前の情報を複合する
@@ -29,6 +29,23 @@ function getUserId(req, authToken) {
 
   throw new Error("認証権限がありません");
 }
+
+// function getUserId(req) {
+//   const authHeader = req.headers.authorization;  // Authorizationヘッダーの取得
+//   if (authHeader) {
+//     const token = authHeader.replace("Bearer ", "").trim();  // "Bearer "を削除
+//     if (!token) {
+//       throw new Error("トークンが見つかりませんでした");
+//     }
+//     try {
+//       const { userId } = jwt.verify(token, APP_SECRET);  // JWTを検証し、userIdを取得
+//       return userId;
+//     } catch (e) {
+//       throw new Error("トークンが無効です");
+//     }
+//   }
+//   throw new Error("認証権限がありません");
+// }
 
 module.exports = {
   APP_SECRET,
