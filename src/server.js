@@ -11,7 +11,11 @@ const Mutation = require("./resolvers/Mutation");
 const Link = require("./resolvers/Link");
 const User = require("./resolvers/User");
 
+//サブスクリプションの実装
+const { Pubsub } = require("apollo-server");
+
 const prisma = new PrismaClient();
+const pubsub = new Pubsub();
 
 //リゾルバ関数
 const resolvers = {
@@ -29,6 +33,7 @@ const server = new ApolloServer({
     return {
       ...req,
       prisma,
+      pubsub,
       userId: req && req.headers.authorization ? getUserId(req) : null,  // userIdをcontextに渡す
     };
   },
